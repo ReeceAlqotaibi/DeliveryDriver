@@ -1,0 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Driver : MonoBehaviour
+{
+    [SerializeField] float steerSpeed = 3f;
+    [SerializeField] float moveSpeed = 0.1f;
+
+
+    void Start()
+    {
+
+    }
+
+
+    void Update()
+    {   
+        float steerAmount = Input.GetAxis("Horizontal") * steerSpeed * Time.deltaTime;
+        float moveAmount = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+
+        // Rotates on the {x} {y} {z} axis.
+        transform.Rotate(0, 0, -steerAmount);
+        
+        //Moves on {x} {y} {z} axis.
+        transform.Translate(0, moveAmount, 0);
+    }
+}
