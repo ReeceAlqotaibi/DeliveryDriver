@@ -18,8 +18,8 @@ public class Delivery : MonoBehaviour
     {
 
         spriteRenderer = GetComponent<SpriteRenderer>();
-        blueCar = GameObject.Find("BlueCar");
-        driver = blueCar.GetComponent<Driver>();
+        //blueCar = GameObject.Find("BlueCar");
+        driver = GetComponent<Driver>();
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -46,26 +46,5 @@ public class Delivery : MonoBehaviour
             hasPackage = false;
         }
         
-        // Speed boost at normal speed
-        if(other.tag == "SpeedIncrease" && driver.hasNormalSpeed)
-        {
-            driver.moveSpeedModifier = 1.5f;
-        }
-        // Speed boost at decreased speed
-        else if(other.tag == "SpeedIncrease" && driver.hasSpeedDecrease)
-        {
-            driver.moveSpeedModifier = 1f;
-        }
-        
-        // Speed decrease at normal speed
-        if(other.tag == "SpeedDecrease" && driver.hasNormalSpeed)
-        {
-            driver.moveSpeedModifier = 0.5f;
-        }
-        // Speed decrease at boosted speed
-        else if(other.tag == "SpeedDecrease" && driver.hasSpeedIncrease)
-        {
-            driver.moveSpeedModifier = 1f;
-        }
     }
 }

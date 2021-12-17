@@ -41,7 +41,7 @@ public class Driver : MonoBehaviour
             hasSpeedIncrease = false;
             hasSpeedDecrease = true;
         }
-        
+
         float steerAmount = Input.GetAxis("Horizontal") * steerSpeed * Time.deltaTime;
         float moveAmount = Input.GetAxis("Vertical") * (moveSpeed * moveSpeedModifier) * Time.deltaTime;
 
@@ -56,6 +56,30 @@ public class Driver : MonoBehaviour
 
         //Moves on {x} {y} {z} axis.
         transform.Translate(0, moveAmount, 0);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        // Speed boost at normal speed
+        if(other.tag == "SpeedIncrease" && this.hasNormalSpeed)
+        {
+            this.moveSpeedModifier = 1.5f;
+        }
+        // Speed boost at decreased speed
+        else if(other.tag == "SpeedIncrease" && this.hasSpeedDecrease)
+        {
+            this.moveSpeedModifier = 1f;
+        }
+        
+        // Speed decrease at normal speed
+        if(other.tag == "SpeedDecrease" && this.hasNormalSpeed)
+        {
+            this.moveSpeedModifier = 0.5f;
+        }
+        // Speed decrease at boosted speed
+        else if(other.tag == "SpeedDecrease" && this.hasSpeedIncrease)
+        {
+            this.moveSpeedModifier = 1f;
+        }
     }
        
 }
