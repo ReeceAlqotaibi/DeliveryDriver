@@ -5,17 +5,15 @@ using UnityEngine;
 public class Driver : MonoBehaviour
 {
     [SerializeField] private float steerSpeed = 225f;
-    [SerializeField] public float originalMoveSpeed = 7.5f;
-    [SerializeField] public float modifiedMoveSpeed;
-    public bool hasNormalSpeed = true;
-    public bool hasSpeedIncrease = false;
-    public bool hasSpeedDecrease = false;
+    [SerializeField] public float moveSpeed = 7.5f;
+    [SerializeField] public float moveSpeedModifier = 1f;
 
     private float oldPositionX;
     private float oldPositionY;
 
-
-
+    public bool hasSpeedIncrease = false;
+    public bool hasSpeedDecrease = false;
+    public bool hasNormalSpeed = true;
 
     void Start()
     {
@@ -23,11 +21,10 @@ public class Driver : MonoBehaviour
         oldPositionY = transform.position.y;
     }
 
-
     void Update()
     {   
         float steerAmount = Input.GetAxis("Horizontal") * steerSpeed * Time.deltaTime;
-        float moveAmount = Input.GetAxis("Vertical") * modifiedMoveSpeed * Time.deltaTime;
+        float moveAmount = Input.GetAxis("Vertical") * (moveSpeed * moveSpeedModifier) * Time.deltaTime;
 
         if((oldPositionY < transform.position.y) || (oldPositionY > transform.position.y) || (oldPositionX > transform.position.x) || (oldPositionX < transform.position.x))
         {
