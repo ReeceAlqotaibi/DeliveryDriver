@@ -23,6 +23,25 @@ public class Driver : MonoBehaviour
 
     void Update()
     {   
+        if(moveSpeedModifier == 1)
+        {
+            hasNormalSpeed = true;
+            hasSpeedIncrease = false;
+            hasSpeedDecrease = false;
+        }
+        else if(moveSpeedModifier > 1)
+        {
+            hasNormalSpeed = false;
+            hasSpeedIncrease = true;
+            hasSpeedDecrease = false;
+        }
+        else
+        {
+            hasNormalSpeed = false;
+            hasSpeedIncrease = false;
+            hasSpeedDecrease = true;
+        }
+        
         float steerAmount = Input.GetAxis("Horizontal") * steerSpeed * Time.deltaTime;
         float moveAmount = Input.GetAxis("Vertical") * (moveSpeed * moveSpeedModifier) * Time.deltaTime;
 
