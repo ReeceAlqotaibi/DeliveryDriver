@@ -8,6 +8,7 @@ TagManager:
   - SpeedDecrease
   - Package
   - Customer
+  - Road
   layers:
   - Default
   - TransparentFX
