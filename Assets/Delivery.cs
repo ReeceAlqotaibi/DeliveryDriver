@@ -4,61 +4,43 @@ using UnityEngine;
 
 public class Delivery : MonoBehaviour
 {
+    [SerializeField] float destroyObjectDelay = 0f;
 
-    bool hasPackage = false;
-    [SerializeField] float destroyObjectDelay = 0.1f;
-    [SerializeField] Color32 hasPackageColor = new Color32(107, 224, 100, 255);
-    [SerializeField] Color32 noPackageColor = new Color32(255, 255, 255, 255);
+    [SerializeField] GameObject Package;
 
-    [SerializeField]  float maxSpawnX;
-    [SerializeField] float maxSpawnY;
+    [SerializeField ]GameObject Customer;
 
-    public GameObject PackagePad;
+    private GameObject blueCar;
 
-    private void SpawnPackage()
-    {
-            Instantiate(PackagePad,
-            new Vector3(-6.6f, 1.3f, 0), Quaternion.identity);
-
-    }
-
-
-    SpriteRenderer spriteRenderer;
-    GameObject blueCar;
-    Driver driver;
+    private Driver driver;
 
     private void Start()
     {
-
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        //blueCar = GameObject.Find("BlueCar");
-        driver = GetComponent<Driver>();
+        blueCar = GameObject.Find("BlueCar");
+        driver = blueCar.GetComponent<Driver>();
     }
 
-    void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
         if(driver.hasSpeedIncrease)
         {
             driver.moveSpeedModifier = 1f;
         }
     }
-
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Package" && !hasPackage)
+        if (other.tag == "Package" && !driver.hasPackage)
         {
-            hasPackage = true;
-            spriteRenderer.color = hasPackageColor;
+            driver.hasPackage = true;
+            SpawnableObject customer = new SpawnableObject(Customer, other.transform.position);
             Destroy(other.gameObject, destroyObjectDelay);
-            
         }
         
-        if(other.tag == "Customer" &&  hasPackage) 
+        if(other.tag == "Customer" &&  driver.hasPackage) 
         {
-            spriteRenderer.color = noPackageColor;
-            hasPackage = false;
-            SpawnPackage();
+            driver.hasPackage = false;
+            SpawnableObject package = new SpawnableObject(Package, other.transform.position);
+            Destroy(other.gameObject, destroyObjectDelay);
         }
-        
     }
 }

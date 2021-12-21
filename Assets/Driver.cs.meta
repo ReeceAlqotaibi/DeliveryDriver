@@ -3,7 +3,9 @@ guid: e7e9c329f18c5944590f9f294f1e21fc
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - SpeedUpModifier: {fileID: 3886505355176515399, guid: 5a503b366aa39574a9395f79b4e5ffff, type: 3}
+  - SpeedDownModifier: {fileID: 6844447001704891718, guid: d61295c5dc8d04e4bbf47a94f9ee5ab7, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -9,6 +9,7 @@ TagManager:
   - Package
   - Customer
   - Road
+  - Grass
   layers:
   - Default
   - TransparentFX
