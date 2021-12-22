@@ -4,25 +4,23 @@ using UnityEngine;
 
 public class Delivery : MonoBehaviour
 {
-    [SerializeField] float destroyObjectDelay = 0f;
-
     [SerializeField] GameObject Package;
-
     [SerializeField ]GameObject Customer;
-
     private GameObject blueCar;
-
     private Driver driver;
 
     private void Start()
     {
         blueCar = GameObject.Find("BlueCar");
         driver = blueCar.GetComponent<Driver>();
+
+        SpawnableObject firstPackage = new SpawnableObject(Package, new Vector3(0,0));
+        SpawnableObject.firstSpawnpoint = SpawnableObject.lastSpawnPoint;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(driver.hasSpeedIncrease)
+        if(driver.moveSpeedModifier > 1f)
         {
             driver.moveSpeedModifier = 1f;
         }
@@ -33,14 +31,14 @@ public class Delivery : MonoBehaviour
         {
             driver.hasPackage = true;
             SpawnableObject customer = new SpawnableObject(Customer, other.transform.position);
-            Destroy(other.gameObject, destroyObjectDelay);
+            Destroy(other.gameObject);
         }
         
         if(other.tag == "Customer" &&  driver.hasPackage) 
         {
             driver.hasPackage = false;
             SpawnableObject package = new SpawnableObject(Package, other.transform.position);
-            Destroy(other.gameObject, destroyObjectDelay);
+            Destroy(other.gameObject);
         }
     }
 }

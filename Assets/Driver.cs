@@ -4,26 +4,16 @@ using UnityEngine;
 public class Driver : MonoBehaviour
 {
     [SerializeField] private float steerSpeed = 225f;
-
     [SerializeField] private float moveSpeed = 7.5f;
-
     [SerializeField] public float moveSpeedModifier = 1f;
-
-    [SerializeField] public bool hasPackage = false;
-
     [SerializeField] public GameObject SpeedUpModifier;
-
     [SerializeField] public GameObject SpeedDownModifier;
-
     [SerializeField] SpawnableObject speedUp;
-
     [SerializeField] SpawnableObject speedDown;
-
     private float oldPositionX;
     private float oldPositionY;
-    public bool hasSpeedIncrease = false;
-    public bool hasSpeedDecrease = false;
-    public bool hasNormalSpeed = true;
+
+    public bool hasPackage = false;
 
     private void Start()
     {
@@ -38,24 +28,6 @@ public class Driver : MonoBehaviour
 
     private void Update()
     {   
-        if(moveSpeedModifier == 1)
-        {
-            hasNormalSpeed = true;
-            hasSpeedIncrease = false;
-            hasSpeedDecrease = false;
-        }
-        else if(moveSpeedModifier > 1)
-        {
-            hasNormalSpeed = false;
-            hasSpeedIncrease = true;
-            hasSpeedDecrease = false;
-        }
-        else
-        {
-            hasNormalSpeed = false;
-            hasSpeedIncrease = false;
-            hasSpeedDecrease = true;
-        }
 
         float steerAmount = Input.GetAxis("Horizontal") * steerSpeed * Time.deltaTime;
         float moveAmount = Input.GetAxis("Vertical") * (moveSpeed * moveSpeedModifier) * Time.deltaTime;
@@ -75,23 +47,23 @@ public class Driver : MonoBehaviour
 
     private IEnumerator CreateSpeedModifiers()
     {
-        WaitForSeconds wait = new WaitForSeconds(30);
+        WaitForSeconds wait = new WaitForSeconds(15);
         do {
 
             yield return wait;
 
-                speedUp.DestroyGameObject();
-                speedDown.DestroyGameObject();
+            speedUp.DestroyGameObject();
+            speedDown.DestroyGameObject();
 
-                speedUp = new SpawnableObject(SpeedUpModifier, SpawnableObject.lastSpawnPoint);
-                speedDown = new SpawnableObject(SpeedDownModifier, SpawnableObject.lastSpawnPoint);
+            speedUp = new SpawnableObject(SpeedUpModifier, SpawnableObject.lastSpawnPoint);
+            speedDown = new SpawnableObject(SpeedDownModifier, SpawnableObject.lastSpawnPoint);
         }
         while(true);
     }
 
     private IEnumerator ModifySpeed(float originalSpeed, float newSpeed, bool temp)
     {
-        WaitForSeconds wait = new WaitForSeconds(20);
+        WaitForSeconds wait = new WaitForSeconds(5);
 
         if(temp)
         {
@@ -110,27 +82,27 @@ public class Driver : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Going over speed increaser at normal speed
-        if(other.tag == "SpeedIncrease" && hasNormalSpeed)
+        if(other.tag == "SpeedIncrease" && moveSpeedModifier == 1f)
         {
             StartCoroutine(ModifySpeed(1f, 1.5f, true));
             Destroy(other.gameObject, 0);
         }
         // Going over speed increaser at decreased speed
-        else if(other.tag == "SpeedIncrease" && hasSpeedDecrease)
+        else if(other.tag == "SpeedIncrease" && moveSpeedModifier < 1f)
         {
             StartCoroutine(ModifySpeed(0.5f, 1f, false));
             Destroy(other.gameObject, 0);
         }
         
         // Going over speed decreaser at normal speed
-        if(other.tag == "SpeedDecrease" && hasNormalSpeed)
+        if(other.tag == "SpeedDecrease" && moveSpeedModifier == 1f)
         {
             StartCoroutine(ModifySpeed(1f, 0.5f, true));
             Destroy(other.gameObject, 0);
         }
 
         // Going over speed decreaser at increased speed
-        else if(other.tag == "SpeedDecrease" && hasSpeedIncrease)
+        else if(other.tag == "SpeedDecrease" && moveSpeedModifier > 1f)
         {
             StartCoroutine(ModifySpeed(1.5f, 1f, true));
             Destroy(other.gameObject, 0);
